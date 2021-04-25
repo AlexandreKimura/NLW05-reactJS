@@ -30,6 +30,10 @@ type EpisodeProps = {
 export default function Episode({ episode }: EpisodeProps) {
   const router = useRouter();
 
+  if(router.isFallback) {
+    return <p>Carregando</p>
+  }
+
   return (
     <div className={styles.episode}>
       <div className={styles.thumbnailContainer}>
@@ -65,10 +69,17 @@ export default function Episode({ episode }: EpisodeProps) {
   )
 }
 
+//Para ecommerce - gerar somente as principais na paths e o resto é rendereizado de forma dinâmica conforme as requisições
 export const getStaticPaths: GetStaticPaths = async() => {
   return {
-    paths: [],
-    fallback: 'blocking',
+    paths: [
+      { 
+        params: {
+          slug: 'a-importancia-da-contribuicao-em-open-source' 
+        }
+      }
+    ],
+    fallback: 'blocking', //Fallback = false -> Retorna 404 se não tiver no paths | fallback = true -> Vai tentar renderizar a page no lado do cliente | fallback = blocking -> Roda no servidor do nextJS -> Melhor opção para SEO
   }
 }
 
